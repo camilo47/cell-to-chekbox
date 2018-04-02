@@ -1,0 +1,40 @@
+name: Blank snippet
+description: ''
+author: camilo47
+host: EXCEL
+api_set: {}
+script:
+    content: "$(\"#run\").click(run);\n\nfunction run() {\n    Office.context.document.getSelectedDataAsync(Office.CoercionType.Text, (asyncResult) => {\n        if (asyncResult.status === Office.AsyncResultStatus.Failed) {\n            console.log(asyncResult.error.message);\n        } else {\n            console.debug(`The selected data is \"${asyncResult.value}\".`);\n        }\n    });\n}\n\n$(\"#select\").click(select);\nfunction select() {\n    var splited;\n    Office.context.document.getSelectedDataAsync(Office.CoercionType.Text, (asyncResult) => {\n        if (asyncResult.status === Office.AsyncResultStatus.Failed) {\n            console.log(asyncResult.error.message);\n        } else {\n            var req_sel = asyncResult.value;\n            splited = req_sel.split(\"\\n\");\n            console.debug(splited);\n            for (var a = 1; a < splited.length; a++) {\n                var temp_name = splited[a].split(\"\t\");\n                console.debug(temp_name);\n                var name = temp_name[0];\n                console.debug(name);\n                var container = $('#listado');\n                var inputs = container.find('input');\n                var id = inputs.length + 1;\n\n                $('<input />', { type: 'checkbox', id: 'cb' + id, value: name, name: 'req_selectd' }).appendTo(container);\n                $('<label />', { 'for': 'cb' + id, text: splited[a] }).appendTo(container);\n                $(\"<br>\").appendTo(container);\n\n\n            }\n        }\n    });\n\n}\n\n$('#asignar').on('click', function () {\n\n    var seleted = \"\";\n\n    $('input[type=checkbox]:checked').each(function () {\n\n        if (seleted == \"\") {\n            seleted += $(this).val();\n        } else {\n            seleted += ',' + $(this).val();\n        }\n\n    });\n    console.debug(seleted);\n    llenarcelda(seleted);\n});\n\n\nfunction llenarcelda(texto) {\n    Office.context.document.setSelectedDataAsync(texto,\n        function (asyncResult) {\n            var error = asyncResult.error;\n            if (asyncResult.status === Office.AsyncResultStatus.Failed) {\n                console.log(error.name + \": \" + error.message);\n            }\n        });\n} "
+    language: typescript
+template:
+    content: |-
+        <button id="select" class="ms-Button">
+            <span class="ms-Button-label">Seleccionar REQ</span>
+        </button>
+
+        <div id="listado">
+        </div>
+
+        <button id="asignar" class="ms-Button">
+            <span class="ms-Button-label">Asignar REQ</span>
+        </button>
+    language: html
+style:
+    content: |
+        /* Your style goes here */
+    language: css
+libraries: |
+    https://appsforoffice.microsoft.com/lib/1/hosted/office.js
+    https://appsforoffice.microsoft.com/lib/1/hosted/office.d.ts
+
+    office-ui-fabric-js@1.4.0/dist/css/fabric.min.css
+    office-ui-fabric-js@1.4.0/dist/css/fabric.components.min.css
+
+    core-js@2.4.1/client/core.min.js
+    @types/core-js
+
+    @microsoft/office-js-helpers@0.7.4/dist/office.helpers.min.js
+    @microsoft/office-js-helpers@0.7.4/dist/office.helpers.d.ts
+
+    jquery@3.1.1
+    @types/jquery
