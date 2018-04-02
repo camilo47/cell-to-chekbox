@@ -8,15 +8,15 @@ script:
     language: typescript
 template:
     content: |-
-        <button id="select" class="ms-Button">
-            <span class="ms-Button-label">Seleccionar REQ</span>
+        <button id="select" class="ms-Button"><
+            <span class="ms-Button-label">Seleccionar</span>
         </button>
 
         <div id="listado">
         </div>
 
         <button id="asignar" class="ms-Button">
-            <span class="ms-Button-label">Asignar REQ</span>
+            <span class="ms-Button-label">Asignar </span>
         </button>
     language: html
 style:
